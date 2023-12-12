@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class TmdbsourceConfig(AppConfig):
+class GraphExplorerConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'TMDBSource'
+    name = 'graph_explorer'
