@@ -46,5 +46,5 @@ if __name__ == "__main__":
     recommendations = tmdb_data_source.get_movie_recommendations(movie_id_to_get_recommendations)
 
     # Store recommendations in a JSON file
-    with open('movie_recommendations.json', 'w', encoding='utf-8') as json_file:
+    with open('../movie_recommendations.json', 'w', encoding='utf-8') as json_file:
         json.dump(recommendations, json_file, ensure_ascii=False, indent=2)

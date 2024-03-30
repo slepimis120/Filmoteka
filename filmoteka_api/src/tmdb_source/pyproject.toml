@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+
+[project]
+name = "tmdb_source"
+version = "0.1"
+description = "A Python package for interacting with the TMDB API."
+authors = [
+    {name = "Nemanja Simsic", email = "nemanjasimsic02@gmail.com"},
+]
+requires-python = ">=3.6"
+
+[project.scripts]
+tmdb_source = "tmdb_source:main"
+
+[project.dependencies]
+requests = "^2.25.1"
+python-dotenv = "^0.15.0"
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-cov",
+]

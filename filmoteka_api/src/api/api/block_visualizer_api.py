@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Union
 
+
 class VisualizerAPI(ABC):
     @abstractmethod
     def __init__(self, visualizer_config: Dict[str, Any]):
