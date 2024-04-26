@@ -6,7 +6,6 @@ import json
 # Load environment variables from .env file
 load_dotenv()
 
-
 class TmdbDataSource:
     def __init__(self):
         self.api_key = os.getenv("TMDB_API_KEY")
@@ -26,6 +25,32 @@ class TmdbDataSource:
 
         return response.json()
 
+    def get_movie_recommendations_depth(self, movie_id, depth):
+        if depth == 0:
+            return []
+
+        recommendations = self.get_movie_recommendations(movie_id)
+        all_recommendations = []
+
+        for recommendation in recommendations:
+            recommendation_id = recommendation['id']
+            child_recommendations = self.get_movie_recommendations_depth(recommendation_id, depth - 1)
+
+            recommendation_dict = {
+                "id": recommendation_id,
+                "original_title": recommendation['original_title'],
+                "overview": recommendation['overview'],
+                "vote_average": recommendation['vote_average'],
+                "release_date": recommendation['release_date']
+            }
+
+            if child_recommendations:
+                recommendation_dict["child"] = child_recommendations
+
+            all_recommendations.append(recommendation_dict)
+
+        return all_recommendations
+
     def get_movie_recommendations(self, movie_id):
         endpoint = f'movie/{movie_id}/recommendations'
         params = {'language': 'en-US', 'page': 1}  # You can customize the parameters
@@ -43,7 +68,7 @@ if __name__ == "__main__":
 
     movie_id_to_get_recommendations = 466420  # Replace with an actual TMDB movie ID
 
-    recommendations = tmdb_data_source.get_movie_recommendations(movie_id_to_get_recommendations)
+    recommendations = tmdb_data_source.get_movie_recommendations_depth(movie_id_to_get_recommendations,2)
 
     # Store recommendations in a JSON file
     with open('../movie_recommendations.json', 'w', encoding='utf-8') as json_file:
