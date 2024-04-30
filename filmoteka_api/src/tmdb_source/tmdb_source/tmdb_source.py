@@ -3,14 +3,20 @@ from dotenv import load_dotenv
 import requests
 import json
 
+from filmoteka_api.src.api.api.tmdb_source_api import DataSourceAPI
+
 # Load environment variables from .env file
 load_dotenv()
 
-class TmdbDataSource:
-    def __init__(self):
-        self.api_key = os.getenv("TMDB_API_KEY")
+class TmdbDataSource(DataSourceAPI):
+    def __init__(self, data_source_config):
+        super().__init__(data_source_config)
+        self.api_key = data_source_config.get("TMDB_API_KEY")
+        self.movie_id = data_source_config.get("MOVIE_ID")
         if not self.api_key:
-            raise ValueError("TMDB_API_KEY not found in the environment variables.")
+            raise ValueError("TMDB_API_KEY not found in the data source configuration.")
+        if not self.movie_id:
+            raise ValueError("MOVIE_ID not found in the data source configuration.")
 
         self.base_url = 'https://api.themoviedb.org/3'
         self.headers = {'Content-Type': 'application/json'}
@@ -68,7 +74,7 @@ if __name__ == "__main__":
 
     movie_id_to_get_recommendations = 466420  # Replace with an actual TMDB movie ID
 
-    recommendations = tmdb_data_source.get_movie_recommendations_depth(movie_id_to_get_recommendations,2)
+    recommendations = tmdb_data_source.get_movie_recommendations_depth(movie_id_to_get_recommendations, 2)
 
     # Store recommendations in a JSON file
     with open('../movie_recommendations.json', 'w', encoding='utf-8') as json_file:

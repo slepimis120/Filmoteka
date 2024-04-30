@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Filmoteka</title>
+</head>
+<body>
+    <div style="display: flex;">
+        <div style="flex: 1;">
+            <h1>FILMOTEKA</h1>
+            <button>Simple View</button>
+            <button>Block View</button>
+            <div id="jsonTreeView">JSON Tree View</div>
+            <div id="jsonBirdView">JSON Bird View</div>
+        </div>
+        <div style="flex: 2;">
+            <div>
+                <input type="text" placeholder="File">
+                <input type="text" placeholder="Search">
+            </div>
+            <div>
+                <label>Filter</label>
+                <input type="text">
+                <select>
+                    <option>==</option>
+                    <option>></option>
+                    <option>>=</option>
+                    <option><</option>
+                    <option><=</option>
+                    <option>!=</option>
+                </select>
+                <input type="text">
+            </div>
+            <div id="appliedQueries">Applied Queries</div>
+            <div id="jsonSimpleView">Simple View JSON</div>
+        </div>
+    </div>
+</body>
+</html>

@@ -10,15 +10,14 @@ authors = [
 ]
 requires-python = ">=3.6"
 
-[project.scripts]
-data_source_api = "api.data_source_api:main"
-visualizer_api = "api.visualizer_api:main"
+dependencies = [
+    "requests",
+    "python-dotenv"
+]
 
-[project.dependencies]
-requests = "^2.25.1"
-python-dotenv = "^0.15.0"
-abc = "^0.0.1"
-typing = "^3.7.4.3"
+[project.scripts]
+data_source_api = "api.tmdb_source_api:DataSourceAPI.fetch_data"
+visualizer_api = "api.block_visualizer_api:VisualizerAPI.visualize_data"
 
 [project.optional-dependencies]
 test = [
