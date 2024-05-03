@@ -8,6 +8,7 @@ from filmoteka_api.src.api.api.tmdb_source_api import DataSourceAPI
 # Load environment variables from .env file
 load_dotenv()
 
+
 class TmdbDataSource(DataSourceAPI):
     def __init__(self, data_source_config):
         super().__init__(data_source_config)

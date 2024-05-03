@@ -2,15 +2,19 @@
 <html>
 <head>
     <title>Filmoteka</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
-    <div style="display: flex;">
-        <div style="flex: 1;">
+    <div id="side-bar" style="display: flex;">
+        <div id="top-left-bar" style="flex: 1;">
             <h1>FILMOTEKA</h1>
-            <button>Simple View</button>
             <button>Block View</button>
-            <div id="jsonTreeView">JSON Tree View</div>
-            <div id="jsonBirdView">JSON Bird View</div>
+            <div id="tree-view">
+                Tree View
+            </div>
+            <div id="bird-view">
+                Bird View
+            </div>
         </div>
         <div style="flex: 2;">
             <div>
@@ -30,8 +34,12 @@
                 </select>
                 <input type="text">
             </div>
-            <div id="appliedQueries">Applied Queries</div>
-            <div id="jsonSimpleView">Simple View JSON</div>
+            <div id="applied-queries">
+                Applied Queries
+            </div>
+            <div id="block-view">
+                Block View JSON
+            </div>
         </div>
     </div>
 </body>
