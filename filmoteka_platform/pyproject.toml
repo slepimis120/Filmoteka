@@ -4,7 +4,7 @@ requires = ["setuptools", "wheel"]
 [project]
 name = "filmoteka_platform"
 version = "0.1"
-description = "A Python library that provides core functionalities regarding graphs and plugins."
+description = "A Python library that provides core functionalities for graph manipulation and facilitates communication between plugins."
 authors = [
     {name = "Nemanja Simsic", email = "nemanjasimsic02@gmail.com"},
 ]
@@ -14,5 +14,5 @@ dependencies = [
     "api"
 ]
 
-[tool.setuptools.package-data]
-graph_platform = ["static/*.css", "static/*.js", "static/*.html", "templates/*.html"]
+[project.scripts]
+plugin_manager = "platform.plugin_manager:PluginManager"
