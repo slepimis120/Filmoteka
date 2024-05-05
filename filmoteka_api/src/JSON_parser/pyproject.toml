@@ -2,9 +2,9 @@
 requires = ["setuptools", "wheel"]
 
 [project]
-name = "tmdb_source"
+name = "json_parser"
 version = "0.1"
-description = "A Python package for interacting with the TMDB API."
+description = "A Python library that parses JSON from TMDB Source to Graph."
 authors = [
     {name = "Nemanja Simsic", email = "nemanjasimsic02@gmail.com"},
 ]
@@ -15,4 +15,4 @@ dependencies = [
 ]
 
 [project.entry-points."parser"]
-entry_block_vis = "tmdb_source.tmdb_source:TmdbDataSource"
+file_system_data_source = "JSON_parser.json_parser:JSONParser"

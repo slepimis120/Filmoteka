@@ -4,15 +4,13 @@ from typing import Any, Dict, List, Union
 
 class DataSourceAPI(ABC):
     @abstractmethod
-    def __init__(self, data_source_config: Dict[str, Any]):
-        """
-        Initialize the data source with a configuration.
-        """
-        self.config = data_source_config
+    def name(self):
+        pass
 
     @abstractmethod
-    def fetch_data(self, query: str) -> Union[List[Dict[str, Any]], None]:
-        """
-        Fetch data from the data source based on the provided query.
-        """
+    def identifier(self):
+        pass
+
+    @abstractmethod
+    def fetch_data(self, movie_id: str, tmdb_key: str):
         pass

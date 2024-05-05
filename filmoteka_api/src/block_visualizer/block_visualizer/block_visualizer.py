@@ -1,11 +1,20 @@
-from typing import List, Dict, Any
+import os
 
-from filmoteka_api.src.api.api.block_visualizer_api import VisualizerAPI
+from api.block_visualizer_api import VisualizerAPI
+from api.model import Graph
+from django.template import Template, Context
 
 
 class BlockVisualizer(VisualizerAPI):
-    def __init__(self, visualizer_config: Dict[str, Any]):
-        pass
+    def name(self):
+        return "Block Visualizer"
 
-    def visualize_data(self, data: List[Dict[str, Any]]) -> None:
-        pass
+    def identifier(self):
+        return "Block_Visualizer"
+
+    def visualize(self, graph: Graph):
+        with open(os.path.join(os.path.dirname(__file__), 'templates', 'block_visualizer.html'), 'r') as f:
+            rawTemplate = f.read()
+        template = Template(rawTemplate)
+        context = Context({"graph": graph})
+        return template.render(context)

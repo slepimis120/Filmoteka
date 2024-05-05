@@ -4,22 +4,16 @@ requires = ["setuptools", "wheel"]
 [project]
 name = "block_visualizer"
 version = "0.1"
-description = "A Python package for visualizing data from the TMDB API."
+description = "Block visualizer plugin for Filmoteka"
 authors = [
     {name = "Nemanja Simsic", email = "nemanjasimsic02@gmail.com"},
 ]
 requires-python = ">=3.6"
 
-[project.scripts]
-block_visualizer = "block_visualizer.block_visualizer_api:main"
-
-[project.dependencies]
-requests = "^2.25.1"
-python-dotenv = "^0.15.0"
-matplotlib = "^3.4.3"
-
-[project.optional-dependencies]
-test = [
-    "pytest",
-    "pytest-cov",
+dependencies = [
+    "api",
+    "django"
 ]
+
+[project.entry-points."visualiser"]
+entry_block_vis = "block_visualizer.block_visualizer:BlockVisualizer"

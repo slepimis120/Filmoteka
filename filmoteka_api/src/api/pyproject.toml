@@ -18,9 +18,3 @@ dependencies = [
 [project.scripts]
 data_source_api = "api.tmdb_source_api:DataSourceAPI.fetch_data"
 visualizer_api = "api.block_visualizer_api:VisualizerAPI.visualize_data"
-
-[project.optional-dependencies]
-test = [
-    "pytest",
-    "pytest-cov",
-]

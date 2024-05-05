@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
-from api.model import Graph
 
 
-class VisualizerAPI(ABC):
+class JSONParserAPI(ABC):
     @abstractmethod
     def name(self):
         pass
@@ -12,5 +11,5 @@ class VisualizerAPI(ABC):
         pass
 
     @abstractmethod
-    def visualize(self, graph:Graph):
+    def parse(self, file):
         pass
