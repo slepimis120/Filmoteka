@@ -2,28 +2,37 @@
 <html>
 <head>
     <title>Filmoteka</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'index.css' %}"/>
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="{% static 'index.js' %}"></script>
 </head>
 <body>
-    <div id="side-bar" style="display: flex;">
-        <div id="top-left-bar" style="flex: 1;">
-            <h1>FILMOTEKA</h1>
-            <button>Block View</button>
-            <div id="tree-view">
-                Tree View
+    <div class="container">
+        <!-- Left panel -->
+        <div class="left-panel">
+            <div class="graph-visualizer">
+                <strong>Graph Visualizer</strong>
             </div>
-            <div id="bird-view">
-                Bird View
+            <div class="tree-view">
+                <strong>Tree View</strong>
+                <div class="tree-item">
+
+                </div>
+            </div>
+            <div class="bird-view">
+                <strong>Bird View</strong>
             </div>
         </div>
-        <div style="flex: 2;">
-            <div>
-                <input type="text" placeholder="File">
-                <input type="text" placeholder="Search">
+        <!-- Right panel -->
+        <div class="right-panel">
+            <div class="toolbar">
+                <input type="text" id="file-input" placeholder="File:" />
+                <input type="text" id="search-input" placeholder="Search:" />
             </div>
-            <div>
-                <label>Filter</label>
-                <input type="text">
+            <div class="filter-bar">
+                <strong>Filter: </strong>
+                <input type="text"/>
                 <select>
                     <option>==</option>
                     <option>></option>
@@ -32,14 +41,20 @@
                     <option><=</option>
                     <option>!=</option>
                 </select>
-                <input type="text">
+                <input type="text"/>
             </div>
-            <div id="applied-queries">
-                Applied Queries
+            <div>
+                <button type="submit">Submit</button>
             </div>
-            <div id="block-view">
-                Block View JSON
+            <div class="applied-queries">
+
             </div>
+            <div class="main-view">
+                <div class="graph" id="block-visualizer" style="border: 1px solid black; height: 100%;">
+                    {% block mainView %}{% endblock %}
+                </div>
+            </div>
+
         </div>
     </div>
 </body>

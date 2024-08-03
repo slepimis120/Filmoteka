@@ -1,10 +1,107 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "index.html" %}
 
-</body>
-</html>
+{% block mainView %}
+    <svg width="840" height="380"></svg>
+    <style>
+        .link {
+            stroke: #999;
+            stroke-width: 0.5px;
+        }
+        .node circle {
+            fill: #fff;
+            stroke: #000;
+            stroke-width: 1.5px;
+        }
+        .node text {
+            font: 12px sans-serif;
+        }
+    </style>
+    <script>
+        var nodesGraph = JSON.parse("{{ vertices | escapejs }}");
+        var linksGraph = JSON.parse("{{ edges | escapejs }}");
+
+        var svg = d3.select("svg"),
+            width = +svg.attr("width"),
+            height = +svg.attr("height");
+
+        var g = svg.append("g");
+
+        var simulation = d3.forceSimulation(nodesGraph)
+            .force("link", d3.forceLink(linksGraph).id(function(d) { return d.ID; }).distance(100))
+            .force("charge", d3.forceManyBody().strength(-300))
+            .force("center", d3.forceCenter(width / 2, height / 2));
+
+        var link = g.append("g")
+            .attr("class", "links")
+            .selectAll("line")
+            .data(linksGraph)
+            .enter().append("line")
+            .attr("class", "link");
+
+        var node = g.append("g")
+            .attr("class", "nodes")
+            .selectAll("g")
+            .data(nodesGraph)
+            .enter().append("g")
+            .attr("class", "node")
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended));
+
+        node.append("circle")
+            .attr("r", 10);
+
+        node.append("text")
+            .attr("x", 12)
+            .attr("dy", ".35em")
+            .text(function(d) { return d.ID; });
+
+        simulation
+            .nodes(nodesGraph)
+            .on("tick", ticked);
+
+        simulation.force("link")
+            .links(linksGraph);
+
+        function ticked() {
+            link
+                .attr("x1", function(d) { return d.source.x; })
+                .attr("y1", function(d) { return d.source.y; })
+                .attr("x2", function(d) { return d.target.x; })
+                .attr("y2", function(d) { return d.target.y; });
+
+            node
+                .attr("transform", function(d) {
+                    return "translate(" + d.x + "," + d.y + ")";
+                });
+        }
+
+        function dragstarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+
+        function dragended(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+
+        // Dodavanje zoom mehanizma
+        var zoom = d3.zoom()
+            .scaleExtent([0.2, 4])  // Postavljanje minimalnog i maksimalnog nivoa zuma
+            .on("zoom", function(event) {
+                g.attr("transform", event.transform);
+            });
+
+        svg.call(zoom);
+
+    </script>
+{% endblock %}

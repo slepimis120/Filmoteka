@@ -17,3 +17,6 @@ dependencies = [
 
 [project.entry-points."visualiser"]
 entry_block_vis = "block_visualizer.block_visualizer:BlockVisualizer"
+
+[tool.setuptools.package-data]
+block_visualizer = ["templates/*.html"]

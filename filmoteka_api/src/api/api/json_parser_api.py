@@ -11,5 +11,5 @@ class JSONParserAPI(ABC):
         pass
 
     @abstractmethod
-    def parse(self, file):
+    def parse(self, path: str):
         pass

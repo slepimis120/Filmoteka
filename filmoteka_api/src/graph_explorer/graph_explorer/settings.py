@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -45,7 +45,8 @@ ROOT_URLCONF = 'graph_explorer.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ROOT_DIR / 'filmoteka_platform' / 'filmoteka_platform' / 'templates'],
+        'DIRS': [(ROOT_DIR / 'filmoteka_platform' / 'filmoteka_platform' / 'templates'),
+                 (ROOT_DIR / 'block_visualizer' / 'block_visualizer' / 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -71,6 +72,10 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(ROOT_DIR, 'filmoteka_platform/filmoteka_platform/static'),
+]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

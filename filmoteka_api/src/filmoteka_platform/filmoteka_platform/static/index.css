@@ -1,0 +1,86 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    display: flex;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.left-panel {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.graph-visualizer {
+    border: 1px solid black;
+    padding: 10px;
+    flex-grow: 1;
+}
+.tree-view, .bird-view {
+    border: 1px solid black;
+    padding: 10px;
+}
+.tree-view {
+    flex-grow: 2;
+}
+.bird-view {
+    flex-grow: 1;
+    height: 150px;
+}
+.right-panel {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-left: 20px;
+    box-sizing: border-box;
+}
+.toolbar, .filter-bar, .applied-queries {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+}
+.toolbar input, .filter-bar input {
+    flex-grow: 1;
+}
+.applied-queries {
+    flex-wrap: wrap;
+}
+.applied-queries span {
+    background-color: lightgray;
+    padding: 3px 7px;
+    border-radius: 5px;
+}
+.main-view {
+    flex-grow: 1;
+    border: 1px solid black;
+    padding: 10px;
+}
+
+input:disabled {
+    background-color: #e0e0e0;
+    cursor: not-allowed;
+}
+
+.suggestions-box {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    width: 100%;
+    z-index: 1000;
+}
+
+.suggestion-item {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background-color: #f0f0f0;
+}
