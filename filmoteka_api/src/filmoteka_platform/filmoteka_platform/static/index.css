@@ -17,8 +17,12 @@ body {
 }
 .graph-visualizer {
     border: 1px solid black;
-    padding: 10px;
     flex-grow: 1;
+    height: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 .tree-view, .bird-view {
     border: 1px solid black;

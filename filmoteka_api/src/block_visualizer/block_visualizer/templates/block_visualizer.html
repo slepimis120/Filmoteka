@@ -5,9 +5,9 @@
     <style>
         .link {
             stroke: #999;
-            stroke-width: 0.5px;
+            stroke-width: 1px;
         }
-        .node circle {
+        .node rect {
             fill: #fff;
             stroke: #000;
             stroke-width: 1.5px;
@@ -27,9 +27,21 @@
         var g = svg.append("g");
 
         var simulation = d3.forceSimulation(nodesGraph)
-            .force("link", d3.forceLink(linksGraph).id(function(d) { return d.ID; }).distance(100))
-            .force("charge", d3.forceManyBody().strength(-300))
-            .force("center", d3.forceCenter(width / 2, height / 2));
+            .force("link", d3.forceLink(linksGraph)
+                .id(function(d) { return d.ID; })
+                .distance(600)
+            )
+            .force("charge", d3.forceManyBody()
+                .strength(-1000)
+            )
+            .force("collide", d3.forceCollide(function(d) {
+                return d.maxWidth / 2 + 10;
+            }))
+            .force("center", d3.forceCenter(width / 2, height / 2))
+            .alphaDecay(0.01)
+            .alphaMin(0.001);
+
+
 
         var link = g.append("g")
             .attr("class", "links")
@@ -49,13 +61,61 @@
                 .on("drag", dragged)
                 .on("end", dragended));
 
-        node.append("circle")
-            .attr("r", 10);
+        var tempText = svg.append("text").style("opacity", 0);
+
+        node.each(function(d) {
+            var textLines = [d.ID];
+            for (var key in d.attributes) {
+                if (d.attributes.hasOwnProperty(key)) {
+                    textLines.push(key + ": " + d.attributes[key]);
+                }
+            }
+
+            var maxWidth = 0;
+            textLines.forEach(function(line) {
+                tempText.text(line);
+                var bbox = tempText.node().getBBox();
+                maxWidth = Math.max(maxWidth, bbox.width);
+            });
+
+            var padding = 20;
+            d.maxWidth = maxWidth + padding;
+            d.height = 30 + textLines.length * 20 + 10; // Added space for line and padding
+        });
+
+        tempText.remove();
+
+        node.append("rect")
+            .attr("width", function(d) { return d.maxWidth; })
+            .attr("height", function(d) { return d.height; })
+            .attr("x", function(d) { return -d.maxWidth / 2; })
+            .attr("y", function(d) { return -d.height / 2; });
 
         node.append("text")
-            .attr("x", 12)
-            .attr("dy", ".35em")
+            .attr("text-anchor", "middle")
+            .attr("dy", "-0.5em")
+            .attr("font-weight", "bold")
             .text(function(d) { return d.ID; });
+
+        node.append("line")
+            .attr("x1", function(d) { return -d.maxWidth / 2; })
+            .attr("y1", function(d) { return 0.5; })
+            .attr("x2", function(d) { return d.maxWidth / 2; })
+            .attr("y2", function(d) { return 0.5; })
+            .attr("stroke", "#000")
+            .attr("stroke-width", 1);
+
+        node.append("text")
+            .attr("text-anchor", "middle")
+            .attr("dy", "1.5em") // Adjust to position text below the line
+            .selectAll("tspan")
+            .data(function(d) {
+                return Object.entries(d.attributes);
+            })
+            .enter().append("tspan")
+            .attr("x", 0)
+            .attr("dy", "1.2em")
+            .text(function(d) { return d[0] + ": " + d[1]; });
 
         simulation
             .nodes(nodesGraph)
@@ -94,9 +154,9 @@
             d.fy = null;
         }
 
-        // Dodavanje zoom mehanizma
+        // Add zoom functionality
         var zoom = d3.zoom()
-            .scaleExtent([0.2, 4])  // Postavljanje minimalnog i maksimalnog nivoa zuma
+            .scaleExtent([0.2, 4])
             .on("zoom", function(event) {
                 g.attr("transform", event.transform);
             });
