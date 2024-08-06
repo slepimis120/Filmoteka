@@ -37,13 +37,13 @@ def generate_and_visualize(request):
     if parse_plugin:
         template_dir = os.path.join(os.path.dirname(__file__), '..', '..')
         json_path = os.path.join(template_dir, 'movie_recommendations.json')
-        graph = parse_plugin.parse(json_path)
+        apps.get_app_config('filmoteka_platform').graph = parse_plugin.parse(json_path)
     else:
         return JsonResponse({'error': f'Plugin {parse_data_plugin} not found'}, status=404)
 
     visualize_plugin = next((plugin for plugin in visualize_plugin if plugin.identifier() == "Block_Visualizer"), None)
     if visualize_plugin:
-        html_output = visualize_plugin.visualize(graph)
+        html_output = visualize_plugin.visualize(apps.get_app_config('filmoteka_platform').graph)
         return HttpResponse(html_output)
     else:
         return JsonResponse({'error': f'Plugin Block_Visualizer not found'}, status=404)
@@ -71,8 +71,28 @@ def tmdb_search(request):
         return JsonResponse({'results': []})
 
 
-def parse_and_visualize():
-    return None
+@csrf_exempt
+def parse_and_visualize(request):
+    request_data = json.loads(request.body)
+    file_path = request_data.get('file_path', None)
+
+    data_source_plugins = apps.get_app_config('filmoteka_platform').data_source_plugins
+    visualize_plugin = apps.get_app_config('filmoteka_platform').visualizer_plugins
+    parse_data_plugin = "json_parser"
+
+    parse_plugin = next((plugin for plugin in data_source_plugins if plugin.identifier() == parse_data_plugin), None)
+    if parse_plugin:
+        json_path = os.path.join(file_path)
+        apps.get_app_config('filmoteka_platform').graph = parse_plugin.parse(json_path)
+    else:
+        return JsonResponse({'error': f'Plugin {parse_data_plugin} not found'}, status=404)
+
+    visualize_plugin = next((plugin for plugin in visualize_plugin if plugin.identifier() == "Block_Visualizer"), None)
+    if visualize_plugin:
+        html_output = visualize_plugin.visualize(apps.get_app_config('filmoteka_platform').graph)
+        return HttpResponse(html_output)
+    else:
+        return JsonResponse({'error': f'Plugin Block_Visualizer not found'}, status=404)
 
 
 def search():
@@ -81,3 +101,25 @@ def search():
 
 def filter():
     return None
+
+
+@csrf_exempt
+def get_graph_data(request):
+    graph = apps.get_app_config('filmoteka_platform').graph
+    root_id = apps.get_app_config('filmoteka_platform').rootId
+
+    graph_data = {
+        "vertices": [
+            {"id": vertex.id, "attributes": vertex.attributes}
+            for vertex in graph.vertices
+        ],
+        "edges": [
+            {"start_vertex": edge.start_vertex.id, "end_vertex": edge.end_vertex.id}
+            for edge in graph.edges
+        ],
+        "root_id": root_id
+    }
+
+    print("Graph data:", graph_data)
+
+    return JsonResponse(graph_data)

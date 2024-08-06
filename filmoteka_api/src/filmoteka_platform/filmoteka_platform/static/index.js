@@ -3,12 +3,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.querySelector('input[placeholder="Search:"]');
 
     const suggestionsBox = document.createElement('div');
-
     suggestionsBox.classList.add('suggestions-box');
     searchInput.parentNode.appendChild(suggestionsBox);
 
     let typingTimer;
-    const typingDelay = 2000; // 2 seconds
+    const typingDelay = 2000;
 
     searchInput.addEventListener('input', function() {
         clearTimeout(typingTimer);
@@ -75,6 +74,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.open();
                 document.write(data);
                 document.close();
+
+                initializeTreeView();
             })
             .catch(error => console.error('Fetch error:', error)); // Handle fetch errors
         } else if (fileInput.value.trim() && !searchInput.value.trim()) {
@@ -84,19 +85,54 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': getCookie('csrftoken')
                 },
-                body: JSON.stringify({ file: fileInput.value.trim() })
+                body: JSON.stringify({ file_path: fileInput.value.trim() })
             })
             .then(response => response.text())
             .then(data => {
                 document.open();
                 document.write(data);
                 document.close();
+
+                initializeTreeView();
             })
             .catch(error => console.error('Fetch error:', error)); // Handle fetch errors
         } else {
             console.error('Invalid input: please provide either a file or a search query.');
         }
     });
+
+function initializeTreeView() {
+    fetch('/get_graph_data/', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(graph => {
+        let treeViewManager = createTreeViewManager();
+
+        treeViewManager.setTreeViewData({
+            nodes: graph.vertices.reduce((obj, vertex) => {
+                obj[vertex.id] = vertex.attributes;
+                return obj;
+            }, {}),
+            links: graph.edges.map(edge => ({
+                source: edge.start_vertex,
+                target: edge.end_vertex
+            })),
+            directed: true
+        });
+
+        if (graph.root_id) {
+            treeViewManager.setTreeView(graph.root_id);
+        } else {
+            console.error('Root ID is not provided or graph data is empty.');
+        }
+    })
+    .catch(error => console.error('Error fetching graph data:', error));
+}
+
 });
 
 function getCookie(name) {

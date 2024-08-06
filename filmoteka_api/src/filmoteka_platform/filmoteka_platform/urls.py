@@ -8,4 +8,5 @@ urlpatterns = [
     path('search/<str:search_text>/', views.search, name='search'),
     path('filter/<str:filter_text>/', views.filter, name='filter'),
     path('tmdb_search', views.tmdb_search, name='tmdb_search'),
+    path('get_graph_data/', views.get_graph_data, name='get_graph_data'),
 ]

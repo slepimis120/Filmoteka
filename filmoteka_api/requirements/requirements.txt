@@ -1,3 +1,20 @@
+api @ file:///home/slepilepi/Fakultet/SOK/Filmoteka/filmoteka_api/src/api
 asgiref==3.8.1
+-e git+ssh://git@github.com/slepimis120/Filmoteka.git@055af2194a05e2eee031ff15860bec93a36c98ae#egg=block_visualizer&subdirectory=filmoteka_api/src/block_visualizer
+build==1.2.1
+certifi==2024.2.2
+charset-normalizer==3.3.2
 Django==5.0.4
+-e git+ssh://git@github.com/slepimis120/Filmoteka.git@055af2194a05e2eee031ff15860bec93a36c98ae#egg=filmoteka_platform&subdirectory=filmoteka_api/src/filmoteka_platform
+idna==3.7
+Jinja2==3.1.4
+-e git+ssh://git@github.com/slepimis120/Filmoteka.git@055af2194a05e2eee031ff15860bec93a36c98ae#egg=json_parser&subdirectory=filmoteka_api/src/JSON_parser
+MarkupSafe==2.1.5
+packaging==24.1
+pyproject_hooks==1.1.0
+python-dotenv==1.0.1
+requests==2.31.0
+setuptools==69.5.1
 sqlparse==0.5.0
+-e git+ssh://git@github.com/slepimis120/Filmoteka.git@055af2194a05e2eee031ff15860bec93a36c98ae#egg=tmdb_source&subdirectory=filmoteka_api/src/tmdb_source
+urllib3==2.2.1

@@ -1,5 +1,6 @@
 import json
 
+from django.apps import apps
 from api.json_parser_api import JSONParserAPI
 from api.model import *
 
@@ -17,6 +18,7 @@ class JSONParser(JSONParserAPI):
 
         graph = Graph()
         root_vertex = self._create_vertex_from_json(graph, data)
+        apps.get_app_config('filmoteka_platform').rootId = root_vertex.id
         graph.vertices.add(root_vertex)
 
         self._create_edges_and_children(graph, root_vertex, data.get('child', []))

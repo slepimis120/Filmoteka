@@ -9,13 +9,15 @@ function bird(){
 
     let observer = new MutationObserver(observer_callback);
 
-    observer.observe(mainNode, {
-        subtree: true,
-        attributes: true,
-        childList: true,
-        characterData: true
-    });
+    if(mainNode){
+        observer.observe(mainNode, {
+            subtree: true,
+            attributes: true,
+            childList: true,
+            characterData: true
+        });
 
+    }
 
     d3.select("#mainView").call(d3.zoom()
     .scaleExtent([0.05, 4])

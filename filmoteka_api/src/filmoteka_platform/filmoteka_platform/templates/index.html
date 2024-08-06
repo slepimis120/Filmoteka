@@ -5,6 +5,7 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'index.css' %}"/>
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="{% static 'treeView.js' %}"></script>
     <script src="{% static 'index.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="{% static 'birdView.js' %}"></script>
@@ -19,7 +20,7 @@
             <div class="tree-view">
                 <strong>Tree View</strong>
                 <div class="tree-item">
-
+                    <ul id="treeView"></ul>
                 </div>
             </div>
             <div class="bird-view">
