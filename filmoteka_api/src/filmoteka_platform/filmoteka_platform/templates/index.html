@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="{% static 'index.css' %}"/>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="{% static 'index.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="{% static 'birdView.js' %}"></script>
 </head>
 <body>
     <div class="container">
@@ -22,7 +24,7 @@
             </div>
             <div class="bird-view">
                 <strong>Bird View</strong>
-                {% block birdView %}{% endblock %}
+                <svg id="birdView"></svg>
             </div>
         </div>
         <!-- Right panel -->
@@ -51,7 +53,7 @@
 
             </div>
             <div class="main-view">
-                <div class="graph" id="block-visualizer" style="border: 1px solid black; height: 100%;">
+                <div class="graph" style="border: 1px solid black; height: 100%;">
                     {% block mainView %}{% endblock %}
                 </div>
             </div>

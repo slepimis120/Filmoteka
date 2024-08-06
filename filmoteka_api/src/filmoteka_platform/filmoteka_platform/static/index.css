@@ -34,6 +34,7 @@ body {
 .bird-view {
     flex-grow: 1;
     height: 150px;
+    width: 360px;
 }
 .right-panel {
     width: 70%;
@@ -70,6 +71,10 @@ input:disabled {
     cursor: not-allowed;
 }
 
+.suggestions-box:empty {
+    border: none;
+}
+
 .suggestions-box {
     position: absolute;
     background-color: white;
@@ -87,4 +92,9 @@ input:disabled {
 
 .suggestion-item:hover {
     background-color: #f0f0f0;
+}
+
+#birdView {
+    width: 100%;
+    height: 100%;
 }

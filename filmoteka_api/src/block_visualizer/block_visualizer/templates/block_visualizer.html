@@ -1,7 +1,7 @@
 {% extends "index.html" %}
 
 {% block mainView %}
-    <svg width="840" height="380"></svg>
+    <svg id="mainView" width="840" height="380"></svg>
     <style>
         .link {
             stroke: #999;
@@ -20,7 +20,7 @@
         var nodesGraph = JSON.parse("{{ vertices | escapejs }}");
         var linksGraph = JSON.parse("{{ edges | escapejs }}");
 
-        var svg = d3.select("svg"),
+        var svg = d3.select("#mainView"),
             width = +svg.attr("width"),
             height = +svg.attr("height");
 
@@ -29,10 +29,10 @@
         var simulation = d3.forceSimulation(nodesGraph)
             .force("link", d3.forceLink(linksGraph)
                 .id(function(d) { return d.ID; })
-                .distance(600)
+                .distance(2000)
             )
             .force("charge", d3.forceManyBody()
-                .strength(-1000)
+                .strength(-500)
             )
             .force("collide", d3.forceCollide(function(d) {
                 return d.maxWidth / 2 + 10;
@@ -154,9 +154,8 @@
             d.fy = null;
         }
 
-        // Add zoom functionality
         var zoom = d3.zoom()
-            .scaleExtent([0.2, 4])
+            .scaleExtent([0.05, 4])
             .on("zoom", function(event) {
                 g.attr("transform", event.transform);
             });
