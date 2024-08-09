@@ -25,6 +25,7 @@ def generate_and_visualize(request):
     parse_data_plugin = "json_parser"
     data_source_plugins = apps.get_app_config('filmoteka_platform').data_source_plugins
     visualize_plugin = apps.get_app_config('filmoteka_platform').visualizer_plugins
+    apps.get_app_config('filmoteka_platform').active_filters = []
 
     generate_plugin = next((plugin for plugin in data_source_plugins if plugin.identifier() == generate_data_plugin),
                            None)
@@ -37,13 +38,13 @@ def generate_and_visualize(request):
     if parse_plugin:
         template_dir = os.path.join(os.path.dirname(__file__), '..', '..')
         json_path = os.path.join(template_dir, 'movie_recommendations.json')
-        apps.get_app_config('filmoteka_platform').graph = parse_plugin.parse(json_path)
+        apps.get_app_config('filmoteka_platform').original_graph = parse_plugin.parse(json_path)
     else:
         return JsonResponse({'error': f'Plugin {parse_data_plugin} not found'}, status=404)
 
     visualize_plugin = next((plugin for plugin in visualize_plugin if plugin.identifier() == "Block_Visualizer"), None)
     if visualize_plugin:
-        html_output = visualize_plugin.visualize(apps.get_app_config('filmoteka_platform').graph)
+        html_output = visualize_plugin.visualize(apps.get_app_config('filmoteka_platform').original_graph)
         return HttpResponse(html_output)
     else:
         return JsonResponse({'error': f'Plugin Block_Visualizer not found'}, status=404)
@@ -78,29 +79,76 @@ def parse_and_visualize(request):
 
     data_source_plugins = apps.get_app_config('filmoteka_platform').data_source_plugins
     visualize_plugin = apps.get_app_config('filmoteka_platform').visualizer_plugins
+    apps.get_app_config('filmoteka_platform').active_filters = []
     parse_data_plugin = "json_parser"
 
     parse_plugin = next((plugin for plugin in data_source_plugins if plugin.identifier() == parse_data_plugin), None)
     if parse_plugin:
         json_path = os.path.join(file_path)
-        apps.get_app_config('filmoteka_platform').graph = parse_plugin.parse(json_path)
+        apps.get_app_config('filmoteka_platform').original_graph = parse_plugin.parse(json_path)
     else:
         return JsonResponse({'error': f'Plugin {parse_data_plugin} not found'}, status=404)
 
     visualize_plugin = next((plugin for plugin in visualize_plugin if plugin.identifier() == "Block_Visualizer"), None)
     if visualize_plugin:
-        html_output = visualize_plugin.visualize(apps.get_app_config('filmoteka_platform').graph)
+        html_output = visualize_plugin.visualize(apps.get_app_config('filmoteka_platform').original_graph)
         return HttpResponse(html_output)
     else:
         return JsonResponse({'error': f'Plugin Block_Visualizer not found'}, status=404)
 
 
-def search():
-    return None
+@csrf_exempt
+def add_filter(request):
+    visualize_plugin = apps.get_app_config('filmoteka_platform').visualizer_plugins
+
+    data = json.loads(request.body)
+    attribute = data.get('attribute')
+    operator = data.get('operator')
+    value = data.get('value')
+
+    config = apps.get_app_config('filmoteka_platform')
+    config.active_filters.append({
+        'parameter_name': attribute,
+        'comparator': operator,
+        'value': value
+    })
+
+    visualize_plugin = next((plugin for plugin in visualize_plugin if plugin.identifier() == "Block_Visualizer"), None)
+    if visualize_plugin:
+        html_output = visualize_plugin.visualize(apps.get_app_config('filmoteka_platform').original_graph)
+        return HttpResponse(html_output)
+    else:
+        return JsonResponse({'error': f'Plugin Block_Visualizer not found'}, status=404)
 
 
-def filter():
-    return None
+@csrf_exempt
+def remove_filter(request):
+    visualize_plugin = apps.get_app_config('filmoteka_platform').visualizer_plugins
+
+    data = json.loads(request.body)
+    attribute = data.get('attribute')
+    operator = data.get('operator')
+    value = data.get('value')
+
+    config = apps.get_app_config('filmoteka_platform')
+
+    print("VREDNOSTI: ", attribute, operator, value)
+    print(config.active_filters)
+
+    config.active_filters = [f for f in config.active_filters if not (
+            f['parameter_name'] == attribute and
+            f['comparator'] == operator and
+            f['value'] == value
+    )]
+
+    print(config.active_filters)
+
+    visualize_plugin = next((plugin for plugin in visualize_plugin if plugin.identifier() == "Block_Visualizer"), None)
+    if visualize_plugin:
+        html_output = visualize_plugin.visualize(apps.get_app_config('filmoteka_platform').original_graph)
+        return HttpResponse(html_output)
+    else:
+        return JsonResponse({'error': f'Plugin Block_Visualizer not found'}, status=404)
 
 
 @csrf_exempt
@@ -120,6 +168,17 @@ def get_graph_data(request):
         "root_id": root_id
     }
 
-    print("Graph data:", graph_data)
-
     return JsonResponse(graph_data)
+
+
+@csrf_exempt
+def get_graph_attributes(request):
+    attributes = apps.get_app_config('filmoteka_platform').graph_attributes
+    return JsonResponse(attributes)
+
+
+@csrf_exempt
+def get_graph_filters(request):
+    filters = apps.get_app_config('filmoteka_platform').active_filters
+    print(filters)
+    return JsonResponse(filters, safe=False)

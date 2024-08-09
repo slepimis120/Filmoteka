@@ -23,6 +23,8 @@ class JSONParser(JSONParserAPI):
 
         self._create_edges_and_children(graph, root_vertex, data.get('child', []))
 
+        self._update_graph_attributes(graph)
+
         return graph
 
     def _create_vertex_from_json(self, graph, data):
@@ -53,3 +55,11 @@ class JSONParser(JSONParserAPI):
 
             if 'child' in child:
                 self._create_edges_and_children(graph, child_vertex, child['child'])
+
+    def _update_graph_attributes(self, graph):
+        attributes = {}
+        for vertex in graph.vertices:
+            for attr, value in vertex.attributes.items():
+                if attr not in attributes:
+                    attributes[attr] = type(value).__name__
+        apps.get_app_config('filmoteka_platform').graph_attributes = attributes

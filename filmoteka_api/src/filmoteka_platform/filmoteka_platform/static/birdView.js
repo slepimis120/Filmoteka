@@ -6,7 +6,6 @@ $(document).ready(function(){
 
 function bird(){
     let mainNode = d3.select("#mainView").node();
-
     let observer = new MutationObserver(observer_callback);
 
     if(mainNode){
@@ -16,7 +15,6 @@ function bird(){
             childList: true,
             characterData: true
         });
-
     }
 
     d3.select("#mainView").call(d3.zoom()
@@ -31,6 +29,11 @@ function bird(){
 }
 
 function observer_callback(mutationsList, observer) {
+    let mainG = d3.select("#mainView").select("g");
+    if (!mainG.node()) {
+        return;
+    }
+
     let main = d3.select("#mainView").html();
     d3.select("#birdView").html(main);
 
@@ -66,6 +69,9 @@ function updateViewport(transform) {
     transform = transform || lastTransform;
 
     let mainG = d3.select("#mainView").select("g");
+    if (!mainG.node()) {
+        return;
+    }
     let mainBBox = mainG.node().getBBox();
 
     let mainWidth = mainBBox.width;
@@ -91,12 +97,11 @@ function updateViewport(transform) {
         .attr("fill", "none")
         .attr("stroke", "red")
         .attr("stroke-width", 1)
-        .merge(viewport)  // Update existing .viewport elements
+        .merge(viewport)
         .attr("x", -transform.x/20)
         .attr("y", -transform.y/20)
         .attr("width", viewportWidth/20)
         .attr("height", viewportHeight/20);
 
-    // Exit: Remove any .viewport elements that are no longer needed
     viewport.exit().remove();
 }

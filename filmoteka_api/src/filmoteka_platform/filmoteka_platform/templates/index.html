@@ -28,7 +28,7 @@
                 <svg id="birdView"></svg>
             </div>
         </div>
-        <!-- Right panel -->
+
         <div class="right-panel">
             <div class="toolbar">
                 <input type="text" id="file-input" placeholder="File:" />
@@ -36,29 +36,25 @@
             </div>
             <div class="filter-bar">
                 <strong>Filter: </strong>
-                <input type="text"/>
-                <select>
-                    <option>==</option>
-                    <option>></option>
-                    <option>>=</option>
-                    <option><</option>
-                    <option><=</option>
-                    <option>!=</option>
+                <select id="attribute-select">
+
                 </select>
-                <input type="text"/>
+                <select id="operator-select">
+
+                </select>
+                <input type="text" id="filter-value" placeholder="Enter filter value"/>
             </div>
             <div>
                 <button type="submit">Submit</button>
             </div>
             <div class="applied-queries">
-
+                <!-- Display applied queries here if necessary -->
             </div>
             <div class="main-view">
                 <div class="graph" style="border: 1px solid black; height: 100%;">
                     {% block mainView %}{% endblock %}
                 </div>
             </div>
-
         </div>
     </div>
 </body>

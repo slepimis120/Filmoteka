@@ -5,10 +5,12 @@ import pkg_resources
 
 class FilmotekaPlatformConfig(AppConfig):
     name = 'filmoteka_platform'
+    original_graph = Graph()
     graph = Graph()
     visualizer_plugins = []
     data_source_plugins = []
-    current_visualization = None
+    graph_attributes = {}
+    active_filters = []
 
     def ready(self):
         self.visualizer_plugins = load_plugins("visualiser")
